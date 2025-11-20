@@ -4,6 +4,7 @@ import './AdminLoginPage.css';
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
+  const [loginType, setLoginType] = useState('admin'); // 'admin' эсвэл 'agency'
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -25,16 +26,25 @@ const AdminLoginPage = () => {
     setLoading(true);
     setError('');
 
-    // API руу нэвтрэх хүсэлт илгээх
     try {
-      // Хуурамч authentication (бодит системд API call болно)
-      if (formData.email === 'admin@studyinworld.mn' && formData.password === 'admin123') {
-        // JWT token хадгалах
-        localStorage.setItem('adminToken', 'mock-admin-token');
-        localStorage.setItem('userType', 'admin');
-        navigate('/admin/dashboard');
+      if (loginType === 'admin') {
+        // Админ нэвтрэх
+        if (formData.email === 'admin@studyinworld.mn' && formData.password === 'admin123') {
+          localStorage.setItem('adminToken', 'mock-admin-token');
+          localStorage.setItem('userType', 'admin');
+          navigate('/admin/dashboard');
+        } else {
+          setError('И-мэйл эсвэл нууц үг буруу байна');
+        }
       } else {
-        setError('И-мэйл эсвэл нууц үг буруу байна');
+        // Зуучлагч нэвтрэх
+        if (formData.email === 'agency@studyinworld.mn' && formData.password === '') {
+          localStorage.setItem('adminToken', 'mock-agency-token');
+          localStorage.setItem('userType', 'agency');
+          navigate('/agency/dashboard');
+        } else {
+          setError('И-мэйл эсвэл нууц үг буруу байна');
+        }
       }
     } catch (err) {
       setError('Алдаа гарлаа. Дахин оролдоно уу.');
@@ -49,8 +59,34 @@ const AdminLoginPage = () => {
         <div className="login-card">
           <div className="login-header">
             <div className="login-icon">🔐</div>
-            <h1 className="login-title">Админ нэвтрэх</h1>
-            <p className="login-subtitle">StudyInWorld.mn удирдлагын систем</p>
+            <h1 className="login-title">Нэвтрэх</h1>
+            <p className="login-subtitle">StudyInWorld.mn</p>
+          </div>
+
+          {/* Login Type Selector */}
+          <div className="login-type-selector">
+            <button
+              type="button"
+              className={`type-btn ${loginType === 'admin' ? 'active' : ''}`}
+              onClick={() => {
+                setLoginType('admin');
+                setError('');
+                setFormData({ email: '', password: '' });
+              }}
+            >
+              👨‍💼 Админ
+            </button>
+            <button
+              type="button"
+              className={`type-btn ${loginType === 'agency' ? 'active' : ''}`}
+              onClick={() => {
+                setLoginType('agency');
+                setError('');
+                setFormData({ email: '', password: '' });
+              }}
+            >
+              🏢 Зуучлагч
+            </button>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -75,7 +111,7 @@ const AdminLoginPage = () => {
                   className="form-input"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="admin@studyinworld.mn"
+                  placeholder={loginType === 'admin' ? 'admin@studyinworld.mn' : 'agency@studyinworld.mn'}
                   required
                 />
               </div>
@@ -109,8 +145,17 @@ const AdminLoginPage = () => {
 
             <div className="demo-credentials">
               <p className="demo-title">Туршилтын нэвтрэх мэдээлэл:</p>
-              <p className="demo-info">И-мэйл: admin@studyinworld.mn</p>
-              <p className="demo-info">Нууц үг: admin123</p>
+              {loginType === 'admin' ? (
+                <>
+                  <p className="demo-info">И-мэйл: admin@studyinworld.mn</p>
+                  <p className="demo-info">Нууц үг: admin123</p>
+                </>
+              ) : (
+                <>
+                  <p className="demo-info">И-мэйл: agency@studyinworld.mn</p>
+                  <p className="demo-info">Нууц үг: agency123</p>
+                </>
+              )}
             </div>
           </form>
         </div>

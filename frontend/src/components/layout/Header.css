@@ -132,3 +132,15 @@
     display: none;
   }
 }
+/* Өмнөх CSS-ийн доор нэмнэ үү */
+
+.nav-menu .btn {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .nav-menu .btn {
+    width: 90%;
+    margin: 0 auto;
+  }
+}

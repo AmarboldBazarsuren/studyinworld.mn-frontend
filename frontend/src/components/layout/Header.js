@@ -56,6 +56,15 @@ const Header = () => {
                 Зуучлагч бүртгүүлэх
               </Link>
             </li>
+            <li className="nav-item">
+              <Link 
+                to="/admin/login" 
+                className="btn btn-outline btn-sm"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Нэвтрэх
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
